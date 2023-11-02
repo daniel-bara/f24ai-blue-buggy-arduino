@@ -4,7 +4,6 @@
 
 // SSAV Chassis Arduino Control Code
 // Requires SEEED CAN Bus Protocol Library
-// Created By Theo Gwynn, theogwynn@hotmail.com
 // SEEED Can Bus Library Setup
 #define CAN_2515
 const int SPI_CS_PIN = 10;   // SPI Pin, shown in Circuit diagram
