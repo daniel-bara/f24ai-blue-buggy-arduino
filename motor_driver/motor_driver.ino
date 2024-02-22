@@ -34,7 +34,7 @@ int velocityRequestRaw = 0;
 int Motion(int velocityRequestRaw)
 {
   velocityRequest = map(velocityRequestRaw, 0, 1950, 0, 255); // Maps CAN Bus protocol to applicable PWM signal.255 is equivalent to 100 % motor duty cycle.
-  // Forward drive
+  // Forward drive       //////WHY 1950 IS THE MAXIMUM?
   if (velocityRequest >= 0 && velocityRequest <= 255)
   {
     analogWrite(RPWM_Output, 0);
@@ -64,13 +64,13 @@ int Steer(int steeringRequestRaw)
   // Turning right - Seperate mapping required for each direction due to SSAV steering geometry
   if (steeringRequest < 900)
   {
-    steeringRequest = map(steeringRequestRaw, 0, 900, -30, 90);
+    steeringRequest = map(steeringRequestRaw, 0, 900, 35, 85);             /// 35 for extreme right(1/8th model)
     // Maps CAN Bus protocol to Servo Value. Empirically determined
   }
   // Turning left
   else if (steeringRequest >= 900)
   {
-    steeringRequest = map(steeringRequestRaw, 900, 1800, 90, 247.5);
+    steeringRequest = map(steeringRequestRaw, 900, 1800, 85, 135);        /// 135 for extreme left (1/8th model)
   }
   // Out of bounds check
   if (steeringRequest >= 55 && steeringRequest <= 155)
@@ -149,14 +149,14 @@ void loop()
       Serial.println("Idle, No Function Active");
     }
     // Calls motor function if the correct command is sent
-    else if (canId == 1298)
+    else if (canId == 1298) ////////////////////////////////////WHY 1298 IS THE ID FOR MOTOR
     {
       Serial.println("Motor Function Active");
       velocityRequestRaw = HexaDecoder(intBuf); // Calls Hex decoder function.
       Motion(velocityRequestRaw);               // Calls motor function.
     }
     // Calls steering function if the correct command is sent
-    else if (canId = 1299)
+    else if (canId = 1299) //////////////////////////////////////WHY 1299 IS THE ID FOR servo
     {
       Serial.println("Steering Function Active");
       steeringRequestRaw = HexaDecoder(intBuf); // Calls Hex decoder function.
